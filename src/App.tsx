@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
 import './App.css';
+import {Bee, Drone, Queen, Worker} from "./Bee";
+
+const Bees = () => {
+    const workers: Array<Bee> = Array.from({length: 10}, () => {
+        return new Worker();
+    });
+    const drones: Array<Bee> = Array.from({length: 10}, () => {
+        return new Drone();
+    });
+    const queens: Array<Bee> = Array.from({length: 10}, () => {
+        return new Queen();
+    });
+    const bees: Array<Bee> = workers.concat(drones).concat(queens);
+
+
+    const [hive, setHive] = useState(bees);
+    const damageHandler = () => {
+        hive.forEach((bee) => {
+            bee.damage(Math.random() * 80)
+        });
+        setHive([...hive]);
+    };
+    return (
+        <>
+            <ul>
+                {hive.map((bee, index) =>
+                    <li key={index}>{bee.render()}</li>
+                )}
+            </ul>
+            <button onClick={damageHandler}>Damage</button>
+        </>
+    );
+};
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Bees/>
+    );
 }
 
 export default App;
